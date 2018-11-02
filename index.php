@@ -10,7 +10,7 @@
     
     //รับข้อความจากผู้ใช้
     $message = $arrayJson['events'][0]['message']['text'];
-	// $message = "ไป";
+	 // $message = "ไป ไหน";
 
 	$pos_por = strpos($message,"ป้ออ");
 
@@ -23,14 +23,15 @@
 	$txt = null;
 	if($pos_where !== false){
 	    $explode_ = explode('ไป',$message);
-
-	    if($explode_[0]===""){
+	    print_r($explode_);
+	    if($explode_[1]===""){
 		    $message = 'where';
 	    }else{
 		    $txt = $explode_[1];
 		    $message = 'google';
 	    }
 	}
+
 
 		$res_txt_por =  [
 							'tik' =>[
@@ -43,7 +44,7 @@
 			                        'กรี๊ดดดดดดด',
 			                        'กรี๊ดดดดดดดดดดดควยต๊อบดดดดดดดดดดด'
 			                        ],
-			                'google' => 'https://www.google.com/maps/search/?api=1&query='.$txt,
+			                'google' => 'https://www.google.com/maps/search/?api=1&query='.trim($txt),
 			                'where'	 =>'จะไปไหนดีล่ะ -- อยากไปไหนพิมพ์ ไป ตามด้วยสถานที่ เช่น "ไปจุตจักร"'
 	               		];
 
