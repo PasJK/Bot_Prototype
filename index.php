@@ -125,7 +125,7 @@ function explode_text($txt,$msg)
 			 }
 
 
-			return [$ori,$dest];
+			return [$ori[1],$dest];
 
 		}else if($txt == "ไป"){
 		    $explode_ = explode('ไป',$msg);
