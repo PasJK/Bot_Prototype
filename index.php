@@ -10,28 +10,36 @@
     
     //รับข้อความจากผู้ใช้
     $message = $arrayJson['events'][0]['message']['text'];
-	 // $message = "ไป ไหน";
+	// $message = "ไป";
 
 	$pos_por = strpos($message,"ป้ออ");
 
-	$pos_where = strpos($message,"ไป");
+	$pos_where = strpos($message,"นำทาง");
 
 	if($pos_por !== false){
 	    $message = 'tik';
 	}
 
-	$txt = null;
-	if($pos_where !== false){
-	    $explode_ = explode('ไป',$message);
-	    print_r($explode_);
-	    if($explode_[1]===""){
-		    $message = 'where';
-	    }else{
-		    $txt = $explode_[1];
-		    $message = 'google';
-	    }
-	}
+	$txt 	= null;
+	$src = null;
+	$origin = "ตลาดพลู";
+	$destination = "วุทากาศ";
+	$__Direction = null; 
 
+	if( strpos($message,"นำทาง") !== false)
+	{
+		$src = explode_text("นำทาง",$message);
+		$__DIRECTION = 'https://www.google.com/maps/dir/?api=1&origin='.$src[0].'&destination='.$src[1].'&travelmode=driving';
+		$message = "direct";
+
+	}
+	else if( strpos($message,"ไป") !== false )
+	{
+		$src =  explode_text("ไป",$message);
+		$__DIRECTION = 'https://www.google.com/maps/search/?api=1&query='.$src[1];
+		$message = $src[0];
+	}
+ 
 
 		$res_txt_por =  [
 							'tik' =>[
@@ -42,10 +50,13 @@
 			                        'รำคานนน',
 			                        'ไอโง่',
 			                        'กรี๊ดดดดดดด',
-			                        'กรี๊ดดดดดดดดดดดควยต๊อบดดดดดดดดดดด'
+			                        'กรี๊ดดดดดดดดดดดควยต๊อบดดดดดดดดดดด',
+			                        'ครับ',
+			                        'จ๋าา'
 			                        ],
-			                'google' => 'https://www.google.com/maps/search/?api=1&query='.trim($txt),
-			                'where'	 =>'จะไปไหนดีล่ะ -- อยากไปไหนพิมพ์ ไป ตามด้วยสถานที่ เช่น "ไปจุตจักร"'
+			                'findWay' => $__DIRECTION,
+			                'direct' => $__DIRECTION,
+			                'where'	 =>'จะไปไหนดีล่ะ -- อยากไปไหนพิมพ์ ไป ตามด้วยสถานที่ เช่น "ไปจุตจักร" -- หรือนำทางพิมพ์ "นำทางจากเอกชัย8ไปสยาม"'
 	               		];
 
 
@@ -61,6 +72,10 @@ function getResponse($message,$arrayJson,$arrayHeader,$res_txt_por)
         $arrayPostData['messages'][0]['text'] = $res_txt_por['tik'][array_rand($res_txt_por['tik'],1)];
     }else if($message == 'google'){
         $arrayPostData['messages'][0]['text'] = $res_txt_por['google'];
+    }else if($message == 'findWay'){
+        $arrayPostData['messages'][0]['text'] = $res_txt_por['findWay'];
+    }else if($message == 'direct'){
+        $arrayPostData['messages'][0]['text'] = $res_txt_por['direct'];
     }else if($message == 'where'){
         $arrayPostData['messages'][0]['text'] = $res_txt_por['where'];
     }
@@ -87,8 +102,31 @@ function replyMsg($arrayHeader,$arrayPostData){
     }
    exit;
 
+//check Text
+function explode_text($txt,$msg)
+{	
+		if($txt == "นำทาง")
+		{
+			$explode_ 	= explode("นำทาง", $msg); //นำทางจากเอกชัย8ไปสยาม
+			$textSearch = explode("ไป",$explode_[1]); //จากเอกชัย8ไปสยาม => [0]=>จากเอกชัย8,[1]=>สยาม
 
+			$origin_ 		= explode("จาก",$textSearch[0]); //จากเอกชัย8 => [0]=>จาก,[1]=>เอกชัย8
+			$destination_	= $textSearch[1]; //สยาม
 
+			return [$origin_[1],$destination_];
+
+		}else if($txt == "ไป"){
+		    $explode_ = explode('ไป',$msg);
+		    if($explode_[1]===""){
+			    $m = 'where';
+		    }else{
+			    $t = trim($explode_[1]);
+			    $m = 'findWay';
+		    }	
+		    return [$m,$t];
+		}
+
+}
 
 
 ?>
