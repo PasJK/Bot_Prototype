@@ -10,7 +10,7 @@
     
     //รับข้อความจากผู้ใช้
     $message = $arrayJson['events'][0]['message']['text'];
-	// $message = "จะไปบางขุนเทียน";
+	$message = "ไป";
 
 	$pos_por = strpos($message,"ป้ออ");
 
@@ -23,22 +23,29 @@
 	$txt = null;
 	if($pos_where !== false){
 	    $explode_ = explode('ไป',$message);
-	    $txt = $explode_[1];
-	    $message = 'google';
+
+	    if($explode_[0]===""){
+		    $message = 'where';
+	    }else{
+		    $txt = $explode_[1];
+		    $message = 'google';
+	    }
 	}
 
-	$res_txt_por = ['tik' =>[
-	                        'เรียกไม',
-	                        'ไงลูก',
-	                        'ไง',
-	                        'ว่าไง',
-	                        'รำคานนน',
-	                        'ไอโง่',
-	                        'กรี๊ดดดดดดด',
-	                        'กรี๊ดดดดดดดดดดดควยต๊อบดดดดดดดดดดด'
-	                        ],
-	                'google' => 'https://www.google.com/maps/search/?api=1&query='.$txt
-	               ];
+		$res_txt_por =  [
+							'tik' =>[
+			                        'เรียกไม',
+			                        'ไงลูก',
+			                        'ไง',
+			                        'ว่าไง',
+			                        'รำคานนน',
+			                        'ไอโง่',
+			                        'กรี๊ดดดดดดด',
+			                        'กรี๊ดดดดดดดดดดดควยต๊อบดดดดดดดดดดด'
+			                        ],
+			                'google' => 'https://www.google.com/maps/search/?api=1&query='.$txt,
+			                'where'	 =>'จะไปไหนดีล่ะ -- อยากไปไหนพิมพ์ ไป ตามด้วยสถานที่ เช่น "ไปจุตจักร"'
+	               		];
 
 
 getResponse($message,$arrayJson,$arrayHeader,$res_txt_por);
@@ -53,11 +60,10 @@ function getResponse($message,$arrayJson,$arrayHeader,$res_txt_por)
         $arrayPostData['messages'][0]['text'] = $res_txt_por['tik'][array_rand($res_txt_por['tik'],1)];
     }else if($message == 'google'){
         $arrayPostData['messages'][0]['text'] = $res_txt_por['google'];
-    }else{
-    	echo 's';
+    }else if($message == 'where'){
+        $arrayPostData['messages'][0]['text'] = $res_txt_por['where'];
     }
-
-	// print_r($res_txt_por);
+	print_r($arrayPostData);
 
    replyMsg($arrayHeader,$arrayPostData);
 
