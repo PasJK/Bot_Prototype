@@ -10,7 +10,7 @@
     
     //รับข้อความจากผู้ใช้
     $message = $arrayJson['events'][0]['message']['text'];
-	$message = "ไป";
+	// $message = "ไป";
 
 	$pos_por = strpos($message,"ป้ออ");
 
