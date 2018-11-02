@@ -10,7 +10,7 @@
     
     //รับข้อความจากผู้ใช้
     $message = $arrayJson['events'][0]['message']['text'];
-   $message = 'ไป';
+   // $message = 'ไป';
 #ตัวอย่าง Message Type "Text"
 
 
@@ -117,7 +117,7 @@
                             'ตั้ม'      =>   $callName_Tum_1,
                             'ไป'         =>   $sayWhere_2,
                             'ไปไหนดี' 	=>   $sayWhere_2,
-                           $message    =>    ($message == "ไปไหนดี") ? $sayWhere_2 : $sayWhere_1,
+                           // $message    =>    ($message == "ไปไหนดี") ? $sayWhere_2 : $sayWhere_1,
                             #Chihuahua
                             'ฮะจิ'       =>    $callHachi_1,
                             'อัจจิ'       =>  $callHachi_2,
