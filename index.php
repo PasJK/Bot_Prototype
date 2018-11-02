@@ -10,7 +10,7 @@
     
     //รับข้อความจากผู้ใช้
     $message = $arrayJson['events'][0]['message']['text'];
-	// $message = "ไป";
+	// $message = "จำนำไป";
 
 	$pos_por = strpos($message,"ป้ออ");
 
@@ -29,8 +29,12 @@
 	if( strpos($message,"นำทาง") !== false)
 	{
 		$src = explode_text("นำทาง",$message);
-		$__DIRECTION = 'https://www.google.com/maps/dir/?api=1&origin='.$src[0].'&destination='.$src[1].'&travelmode=driving';
-		$message = "direct";
+		if($src[0] != 'where'){
+			$__DIRECTION = 'https://www.google.com/maps/dir/?api=1&origin='.$src[0].'&destination='.$src[1].'&travelmode=driving';
+			$message = "direct";
+		}else{
+			$message = $src[0];
+		}
 
 	}
 	else if( strpos($message,"ไป") !== false )
@@ -106,14 +110,22 @@ function replyMsg($arrayHeader,$arrayPostData){
 function explode_text($txt,$msg)
 {	
 		if($txt == "นำทาง")
-		{
+		{	
+			$ori  = null;
+			$dest = null;
 			$explode_ 	= explode("นำทาง", $msg); //นำทางจากเอกชัย8ไปสยาม
-			$textSearch = explode("ไป",$explode_[1]); //จากเอกชัย8ไปสยาม => [0]=>จากเอกชัย8,[1]=>สยาม
 
-			$origin_ 		= explode("จาก",$textSearch[0]); //จากเอกชัย8 => [0]=>จาก,[1]=>เอกชัย8
-			$destination_	= $textSearch[1]; //สยาม
+			 if($explode_[1]===""){
+			    $ori = 'where';
+			 }else{
+				$textSearch = explode("ไป",$explode_[1]); //จากเอกชัย8ไปสยาม => [0]=>จากเอกชัย8,[1]=>สยาม
 
-			return [$origin_[1],$destination_];
+				$ori 		= explode("จาก",$textSearch[0]); //จากเอกชัย8 => [0]=>จาก,[1]=>เอกชัย8
+				$dest	= $textSearch[1]; //สยาม
+			 }
+
+
+			return [$ori,$dest];
 
 		}else if($txt == "ไป"){
 		    $explode_ = explode('ไป',$msg);
