@@ -52,8 +52,9 @@ if( strpos($message,$TXT_DIRECTION) !== false )
 	}
     ######################  Set txt respond  ###########################
 
-        $userRespond =  [   'U6955ed1ec27181615d917f122eb8de4c' => ['อวบ','โล้น','โล้นน','ศพ'],
-                            'U010bf9787588b308316956ec78c8d126' => 'เต้ย'
+        $userRespond =  [   'U6955ed1ec27181615d917f122eb8de4c' => ['อวบ','โล้น','โล้นน','ศพ','คนตาย'],
+                            'U010bf9787588b308316956ec78c8d126' => ['เต้ย','หน้าหี'],
+                            'U893c6886f0d148be78b87bc5fff06aeb' => ['ต๊อบ','น้อง','ควาย','ถอก']
                         ];
 
 
@@ -62,6 +63,7 @@ if( strpos($message,$TXT_DIRECTION) !== false )
 			                        'เรียกไม',
 			                        'ไงลูก',
 			                        'ไง',
+                                    'ไง'.$userRespond[$userid][array_rand($userRespond[$userid],1)],
 			                        'ว่าไง',
 			                        'รำคานนน',
 			                        'ไอโง่',
@@ -85,15 +87,15 @@ function getResponse($message,$arrayJson,$arrayHeader,$res_txt_por,$userid)
     $arrayPostData['replyToken'] = $arrayJson['events'][0]['replyToken'];
     $arrayPostData['messages'][0]['type'] = "text";
     if($message == 'tik'){
-        $arrayPostData['messages'][0]['text'] = $userid." =>".$res_txt_por['tik'][array_rand($res_txt_por['tik'],1)];
+        $arrayPostData['messages'][0]['text'] = $res_txt_por['tik'][array_rand($res_txt_por['tik'],1)];
     }else if($message == 'google'){
-        $arrayPostData['messages'][0]['text'] = $userid." => ".$res_txt_por['google'];
+        $arrayPostData['messages'][0]['text'] = $res_txt_por['google'];
     }else if($message == 'findWay'){
-        $arrayPostData['messages'][0]['text'] = $userid." => ".$res_txt_por['findWay'];
+        $arrayPostData['messages'][0]['text'] = $res_txt_por['findWay'];
     }else if($message == 'direct'){
-        $arrayPostData['messages'][0]['text'] = $userid." => ".$res_txt_por['direct'];
+        $arrayPostData['messages'][0]['text'] = $res_txt_por['direct'];
     }else if($message == 'where'){
-        $arrayPostData['messages'][0]['text'] = $userid." => ".$res_txt_por['where'];
+        $arrayPostData['messages'][0]['text'] = $res_txt_por['where'];
     }
 	print_r($arrayPostData);
 
