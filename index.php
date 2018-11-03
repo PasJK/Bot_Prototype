@@ -18,7 +18,7 @@
 
     // user id
     $userid  = $arrayJson['events'][0]['source']['userId'];
-    $message = "ป้ออ";
+//    $message = "ป้ออ";
     ######################  Set Conditions ###########################
 	$pos_por = strpos($message,"ป้ออ");
 
