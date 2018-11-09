@@ -18,7 +18,7 @@
 
     // user id
     $userid  = $arrayJson['events'][0]['source']['userId'];
-//    $message = "เชี้ยป้อ";
+//  $message = "เชี้ยป้อ";
 
     ######################  Set Conditions ###########################
 
@@ -58,6 +58,11 @@ if( strpos($message,$TXT_DIRECTION) !== false )
                             'U893c6886f0d148be78b87bc5fff06aeb' => ['','ต๊อบ','น้อง','ควาย','ถอก','ไอ้เหาฉลาม']
                         ];
 
+        $userHardRespond =  ['U6955ed1ec27181615d917f122eb8de4c' => ['โล้น','โล้นน','ศพ','คนตาย'],
+                             'U010bf9787588b308316956ec78c8d126' => ['หน้าหี'],
+                             'U893c6886f0d148be78b87bc5fff06aeb' => ['น้องงง','ควาย','ถอก','ไอ้เหาฉลาม']
+                            ];
+
 
 		$res_txt_por =  [
 							'tik' =>[
@@ -77,7 +82,7 @@ if( strpos($message,$TXT_DIRECTION) !== false )
                                     'อะไรมึง',
                                     'ควยไรล่าาาา',
                                     'อะไรรร'.$userRespond[$userid][array_rand($userRespond[$userid],1)],
-                                    'กรี๊ดดดดดด '.$userRespond[$userid][array_rand($userRespond[$userid],1)].'ด่า',
+                                    'กรี๊ดดดดดด '.$userHardRespond[$userid][array_rand($userHardRespond[$userid],1)].'ด่า',
                                     ],
 			                'findWay' => $__DIRECTION,
 			                'direct'  => $__DIRECTION,
