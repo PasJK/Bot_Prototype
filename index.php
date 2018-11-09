@@ -18,15 +18,15 @@
 
     // user id
     $userid  = $arrayJson['events'][0]['source']['userId'];
-//    $message = "ป้ออ";
+//    $message = "เชี้ยป้อ";
+
     ######################  Set Conditions ###########################
-	$pos_por = strpos($message,"ป้ออ");
 
-    $pos_where = strpos($message,"จะไป");
-
-	if($pos_por !== false){
+	if(strpos($message,"ป้ออ") !== false){
 	    $message = 'tik';
-	}
+	} else if(strpos($message,"เชี้ยป้อ") !== false){
+        $message = 'tik_hard';
+    }
 
 	$txt  = null;
 	$src  = null;
@@ -37,7 +37,8 @@ if( strpos($message,$TXT_DIRECTION) !== false )
 	{
 		$src = explode_text($TXT_DIRECTION,$message);
 		if($src[0] != 'where'){
-			$__DIRECTION = 'https://www.google.com/maps/dir/?api=1&origin='.$src[0].'&destination='.$src[1].'&travelmode=driving';
+
+			$__DIRECTION = GetDirectionURL('findway',$src[0],$src[1]);
 			$message = "direct";
 		}else{
 			$message = $src[0];
@@ -47,14 +48,14 @@ if( strpos($message,$TXT_DIRECTION) !== false )
 	else if( strpos($message,$TXT_FINDPLACE) !== false )
 	{
 		$src =  explode_text($TXT_FINDPLACE,$message);
-		$__DIRECTION = 'https://www.google.com/maps/search/?api=1&query='.$src[1];
+        $__DIRECTION = GetDirectionURL('where','',$src[1]);
 		$message = $src[0];
 	}
     ######################  Set txt respond  ###########################
 
-        $userRespond =  [   'U6955ed1ec27181615d917f122eb8de4c' => ['อวบ','โล้น','โล้นน','ศพ','คนตาย'],
-                            'U010bf9787588b308316956ec78c8d126' => ['เต้ย','หน้าหี'],
-                            'U893c6886f0d148be78b87bc5fff06aeb' => ['ต๊อบ','น้อง','ควาย','ถอก']
+        $userRespond =  [   'U6955ed1ec27181615d917f122eb8de4c' => ['','อวบ','โล้น','โล้นน','ศพ','คนตาย'],
+                            'U010bf9787588b308316956ec78c8d126' => ['','เต้ย','หน้าหี'],
+                            'U893c6886f0d148be78b87bc5fff06aeb' => ['','ต๊อบ','น้อง','ควาย','ถอก','ไอ้เหาฉลาม']
                         ];
 
 
@@ -62,16 +63,22 @@ if( strpos($message,$TXT_DIRECTION) !== false )
 							'tik' =>[
 			                        'เรียกไม',
 			                        'ไงลูก',
-			                        'ไง',
                                     'ไง'.$userRespond[$userid][array_rand($userRespond[$userid],1)],
-			                        'ว่าไง',
+                                    'ว่าไง'.$userRespond[$userid][array_rand($userRespond[$userid],1)],
 			                        'รำคานนน',
 			                        'ไอโง่',
 			                        'กรี๊ดดดดดดด',
 			                        'กรี๊ดดดดดดดดดดดควยต๊อบดดดดดดดดดดด',
 			                        'ครับ',
-			                        'จ๋าา'
+			                        'จ๋าา',
+                                    'พวกหน้าหี'
 			                        ],
+                            'tik_hard' =>[
+                                    'อะไรมึง',
+                                    'ควยไรล่าาาา',
+                                    'อะไรรร'.$userRespond[$userid][array_rand($userRespond[$userid],1)],
+                                    'กรี๊ดดดดดด '.$userRespond[$userid][array_rand($userRespond[$userid],1)].'ด่า',
+                                    ],
 			                'findWay' => $__DIRECTION,
 			                'direct'  => $__DIRECTION,
 			                'where'	  =>'จะไปไหนดีล่ะ -- อยากไปไหนพิมพ์ จะไป ตามด้วยสถานที่ เช่น "จะไปจุตจักร" -- หรือนำทางพิมพ์ "นำทางจากเอกชัย8ไปสยาม"'
@@ -88,6 +95,8 @@ function getResponse($message,$arrayJson,$arrayHeader,$res_txt_por,$userid)
     $arrayPostData['messages'][0]['type'] = "text";
     if($message == 'tik'){
         $arrayPostData['messages'][0]['text'] = $res_txt_por['tik'][array_rand($res_txt_por['tik'],1)];
+    }else if($message == 'tik_hard'){
+        $arrayPostData['messages'][0]['text'] = $res_txt_por['tik_hard'][array_rand($res_txt_por['tik_hard'],1)];
     }else if($message == 'google'){
         $arrayPostData['messages'][0]['text'] = $res_txt_por['google'];
     }else if($message == 'findWay'){
@@ -120,6 +129,20 @@ function replyMsg($arrayHeader,$arrayPostData){
     }
    exit;
 ######## Function #########
+
+//GET Direction URL
+function GetDirectionURL($type,$origin,$destination){
+    $url = null;
+
+        if($type == 'findway'){
+            $url = 'https://www.google.com/maps/dir/?api=1&origin='.trim($origin).'&destination='.trim($destination).'&travelmode=driving';
+        }else if($type == 'where') {
+
+            $url = 'https://www.google.com/maps/search/?api=1&query=' . $destination;
+        }
+    return $url;
+}
+
 //check Text
 function explode_text($txt,$msg)
 { $res = [];
