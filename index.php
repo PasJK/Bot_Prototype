@@ -26,6 +26,8 @@
 	    $message = 'tik';
 	} else if(strpos($message,"เชี้ยป้อ") !== false){
         $message = 'tik_hard';
+    }else if(strpos($message,"เหี้ยป้อ") !== false){
+        $message = 'tik_hard';
     }
 
 	$txt  = null;
